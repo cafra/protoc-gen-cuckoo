@@ -85,7 +85,6 @@ func (g *Generator) Generate() error {
 		g.generateImports(file)
 
 		for i, service := range file.GetService() {
-			g.b.Line()
 			g.generateService(file, service, i)
 		}
 
@@ -151,17 +150,16 @@ func (g *Generator) generateHeader(file *descriptor.FileDescriptorProto) {
 	g.b.Line("// source: ", file.GetName())
 	g.b.Line()
 	g.b.Line(`package `, pkg)
-	g.b.Line()
 }
 
 func (g *Generator) generateImports(file *descriptor.FileDescriptorProto) {
-	g.b.Line(`import (
-		"fmt"
-	
-		etcdv3 "github.com/carolove/cuckoo/net/grpc/lb/etcdv3/wothing"
-		"github.com/cuigh/auxo/util/lazy"
-	)`)
-	g.b.Line()
+	g.b.Line(`
+import (
+	"fmt"
+
+	etcdv3 "github.com/carolove/cuckoo/net/grpc/lb/etcdv3/wothing"
+	"github.com/cuigh/auxo/util/lazy"
+)`)
 }
 
 func (g *Generator) generateService(file *descriptor.FileDescriptorProto, service *descriptor.ServiceDescriptorProto, index int) {
@@ -173,35 +171,34 @@ func (g *Generator) generateService(file *descriptor.FileDescriptorProto, servic
 	name := texts.Rename(service.GetName(), texts.Camel)
 	serviceName := service.GetName()
 	g.b.Format(`
-		var (
-			%s = &%sClient{lazyValue: lazy.Value{New: create%s}}
-		)
-		
-		func Get%s() %sClient {
-			v, err := %s.lazyValue.Get()
-			if err != nil {
-				fmt.Println("%s service Get failed!")
-				return nil
-			}
-		
-			return v.(%sClient)
-		}
-		
-		func create%s() (interface{}, error) {
-			conn, err := etcdv3.NewRPCConn("localhost:2379", "protoc-gen-cuckoo/kv", "127.0.0.1:8081")
-			if err != nil {
-				panic(err)
-			}
-		
-			client := New%sClient(conn)
-			return interface{}(client), nil
-		}
-		
-		type %sClient struct {
-			lazyValue lazy.Value
-		}`, name, name, serviceName, serviceName, serviceName, name, serviceName,
+var (
+	%s = &%sClient{lazyValue: lazy.Value{New: create%s}}
+)
+
+func Get%s() %sClient {
+	v, err := %s.lazyValue.Get()
+	if err != nil {
+		fmt.Println("%s service Get failed!")
+		return nil
+	}
+
+	return v.(%sClient)
+}
+
+func create%s() (interface{}, error) {
+	conn, err := etcdv3.NewRPCConn("localhost:2379", "protoc-gen-cuckoo/kv", "127.0.0.1:8081")
+	if err != nil {
+		panic(err)
+	}
+
+	client := New%sClient(conn)
+	return interface{}(client), nil
+}
+
+type %sClient struct {
+	lazyValue lazy.Value
+}`, name, name, serviceName, serviceName, serviceName, name, serviceName,
 		serviceName, serviceName, serviceName, name)
-	g.b.Line()
 	g.b.Line()
 
 }
