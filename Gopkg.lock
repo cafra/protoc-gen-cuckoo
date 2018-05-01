@@ -30,6 +30,7 @@
     "byte/size",
     "config",
     "data",
+    "data/guid",
     "encoding/yaml",
     "errors",
     "ext/files",
@@ -39,9 +40,16 @@
     "log",
     "log/console",
     "log/file",
+    "net/rpc",
+    "net/rpc/registry",
+    "net/rpc/resolver",
+    "net/transport",
+    "security",
     "util/cast",
     "util/debug",
-    "util/lazy"
+    "util/lazy",
+    "util/retry",
+    "util/run"
   ]
   revision = "5384514d03e9f292cf41bfdac1f6abde6335329d"
 
@@ -145,6 +153,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "5e70adc957b96f977d85bfb3f636532c536b9e70131ba7fa5fe67388d1b75db9"
+  inputs-digest = "c0ba953a22790ff2ab24ec52f070ccb7d7e29e72e8f18600e7685396e91cdda8"
   solver-name = "gps-cdcl"
   solver-version = 1

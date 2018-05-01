@@ -16,11 +16,11 @@ import (
 func main() {
 	config.SetDefaultValue("banner", false)
 
-	app.Name = "protoc-gen-auxo"
+	app.Name = "protoc-gen-cuckoo"
 	app.Version = "0.1"
-	app.Desc = `Code generator for auxo RPC
+	app.Desc = `Code generator for cuckoo GRPC
 
-Usage: protoc --go_out=. --auxo_out=. hello.proto`
+Usage: protoc --go_out=. --cuckoo_out=. hello.proto`
 	app.Action = func(c *app.Context) {
 		if err := generate(); err != nil {
 			fmt.Fprintln(os.Stderr, err.Error())
