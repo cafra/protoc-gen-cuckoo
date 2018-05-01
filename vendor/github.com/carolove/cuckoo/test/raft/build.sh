@@ -1,0 +1,1 @@
+protoc -I model model/messageservice.proto --go_out=plugins=grpc:model

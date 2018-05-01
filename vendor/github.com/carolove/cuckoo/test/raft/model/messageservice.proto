@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package model;
+
+// The message service definition.
+service MessageService {
+  // Append a entry
+  rpc AppendEntries (AppendEntriesRequest) returns (AppendEntriesAck) {}
+  rpc RequestVote   (RequestVoteRequest) returns (RequestVoteAck) {}
+}
+
+// The request message containing the entry.
+message AppendEntriesRequest {
+  string entry = 1;
+}
+
+// The response message containing the ack
+message AppendEntriesAck {
+  bool success = 1;
+}
+
+// The request message containing the vote.
+message RequestVoteRequest {
+  string vote = 1;
+}
+
+// The response message containing the ack
+message RequestVoteAck {
+  bool success = 1;
+  string msg = 2;
+}
+//心跳消息
+message Heartbeat{
+     int64 tenure = 1;//任期
+     int64 time =  2;//时钟
+     int64 noteCount = 3;//节点数
+     string leaderName = 4;//leader 别名
+     string leaderAddr = 5;//leader 地址
+}
+
+
+
+
