@@ -15,16 +15,23 @@ var (
 )
 
 func GetKV() KVClient {
-	in, err := kv.lazyValue.Get()
+	v, err := kv.lazyValue.Get()
 	if err != nil {
 		fmt.Println("KV service Get failed!")
 		return nil
 	}
-	conn, err := etcdv3.NewConn("localhost:2379", "composetesst/kv", "127.0.0.1:8081")
+
+	return v.(KVClient)
+}
+
+func createKV() (interface{}, error) {
+	conn, err := etcdv3.NewRPCConn("localhost:2379", "protoc-gen-cuckoo/kv", "127.0.0.1:8081")
 	if err != nil {
 		panic(err)
 	}
-	return kv
+
+	client := NewKVClient(conn)
+	return interface{}(client), nil
 }
 
 type kvClient struct {
