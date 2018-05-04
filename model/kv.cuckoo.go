@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	kv = &kvClient{lazyValue: lazy.Value{New: createKV}}
+	kv = &kvRPCClient{lazyValue: lazy.Value{New: createKV}}
 )
 
 func GetKV() KVClient {
@@ -34,6 +34,6 @@ func createKV() (interface{}, error) {
 	return interface{}(client), nil
 }
 
-type kvClient struct {
+type kvRPCClient struct {
 	lazyValue lazy.Value
 }
