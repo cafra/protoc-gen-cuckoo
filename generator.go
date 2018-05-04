@@ -172,7 +172,7 @@ func (g *Generator) generateService(file *descriptor.FileDescriptorProto, servic
 	serviceName := service.GetName()
 	g.b.Format(`
 var (
-	%s = &%sClient{lazyValue: lazy.Value{New: create%s}}
+	%s = &%sRPCClient{lazyValue: lazy.Value{New: create%s}}
 )
 
 func Get%s() %sClient {
@@ -195,7 +195,7 @@ func create%s() (interface{}, error) {
 	return interface{}(client), nil
 }
 
-type %sClient struct {
+type %sRPCClient struct {
 	lazyValue lazy.Value
 }`, name, name, serviceName, serviceName, serviceName, name, serviceName,
 		serviceName, serviceName, serviceName, name)
