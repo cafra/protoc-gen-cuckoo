@@ -2,3 +2,6 @@
 main
 debug
 debug.test
+*.tmp
+*.wal
+raft/raftexample/raftexample

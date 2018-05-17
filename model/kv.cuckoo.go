@@ -5,8 +5,10 @@ package model
 
 import (
 	"fmt"
+	"os"
 
-	etcdv3 "github.com/carolove/cuckoo/net/grpc/lb/etcdv3/wothing"
+	etcdv3 "github.com/carolove/cuckoo/net/grpc/lb/local"
+	"github.com/cuigh/auxo/config"
 	"github.com/cuigh/auxo/util/lazy"
 )
 
@@ -25,12 +27,18 @@ func GetKV() KVClient {
 }
 
 func createKV() (interface{}, error) {
-	conn, err := etcdv3.NewRPCConn("localhost:2379", "protoc-gen-cuckoo/kv", "127.0.0.1:8081")
+	key := "rpc.client.kv"
+	if !config.Exist(key) {
+		os.Exit(-1)
+	}
+
+	conn, err := etcdv3.NewConn("protoc-gen-cuckoo/kv", config.GetString(key))
 	if err != nil {
 		panic(err)
 	}
 
 	client := NewKVClient(conn)
+
 	return interface{}(client), nil
 }
 

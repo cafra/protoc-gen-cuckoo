@@ -4,21 +4,8 @@
 [[projects]]
   branch = "master"
   name = "github.com/carolove/cuckoo"
-  packages = ["net/grpc/lb/etcdv3/wothing"]
-  revision = "bd570a7c1f17b63030915c8ac461f27fa6463940"
-
-[[projects]]
-  name = "github.com/coreos/etcd"
-  packages = [
-    "auth/authpb",
-    "clientv3",
-    "etcdserver/api/v3rpc/rpctypes",
-    "etcdserver/etcdserverpb",
-    "mvcc/mvccpb",
-    "pkg/types"
-  ]
-  revision = "fdde8705f5bf9a6d9dbfb0220caf2ee1ac816be8"
-  version = "v3.3.4"
+  packages = ["net/grpc/lb/local"]
+  revision = "326c409db7a2aa04cddb1bd79708ea848b24393b"
 
 [[projects]]
   branch = "master"
@@ -52,16 +39,6 @@
     "util/run"
   ]
   revision = "5384514d03e9f292cf41bfdac1f6abde6335329d"
-
-[[projects]]
-  name = "github.com/gogo/protobuf"
-  packages = [
-    "gogoproto",
-    "proto",
-    "protoc-gen-gogo/descriptor"
-  ]
-  revision = "1adfc126b41513cc696b209667c8656ea7aac67c"
-  version = "v1.0.0"
 
 [[projects]]
   name = "github.com/golang/protobuf"
@@ -133,7 +110,6 @@
     "encoding/proto",
     "grpclb/grpc_lb_v1/messages",
     "grpclog",
-    "health/grpc_health_v1",
     "internal",
     "keepalive",
     "metadata",
@@ -153,6 +129,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c0ba953a22790ff2ab24ec52f070ccb7d7e29e72e8f18600e7685396e91cdda8"
+  inputs-digest = "7fd87bb3fe19c49bfb4a056217dec115bd5bcaed8299a4e7ce8e010499a8a708"
   solver-name = "gps-cdcl"
   solver-version = 1

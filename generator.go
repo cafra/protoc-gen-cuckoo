@@ -156,9 +156,11 @@ func (g *Generator) generateImports(file *descriptor.FileDescriptorProto) {
 	g.b.Line(`
 import (
 	"fmt"
+	"os"
 
-	etcdv3 "github.com/carolove/cuckoo/net/grpc/lb/etcdv3/wothing"
+	etcdv3 "github.com/carolove/cuckoo/net/grpc/lb/local"
 	"github.com/cuigh/auxo/util/lazy"
+	"github.com/cuigh/auxo/config"
 )`)
 }
 
@@ -186,7 +188,12 @@ func Get%s() %sClient {
 }
 
 func create%s() (interface{}, error) {
-	conn, err := etcdv3.NewRPCConn("localhost:2379", "protoc-gen-cuckoo/kv", "127.0.0.1:8081")
+	key := "rpc.client.%s"
+	if !config.Exist(key) {
+		os.Exit(-1)
+	}
+
+	conn, err := etcdv3.NewConn("protoc-gen-cuckoo/%s", config.GetString(key))
 	if err != nil {
 		panic(err)
 	}
@@ -198,7 +205,7 @@ func create%s() (interface{}, error) {
 type %sRPCClient struct {
 	lazyValue lazy.Value
 }`, name, name, serviceName, serviceName, serviceName, name, serviceName,
-		serviceName, serviceName, serviceName, name)
+		serviceName, serviceName, name, name, serviceName, name)
 	g.b.Line()
 
 }

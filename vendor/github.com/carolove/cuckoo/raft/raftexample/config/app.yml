@@ -1,0 +1,9 @@
+db:
+  redis:
+    cm_yn_loan0:
+      address: redis://@127.0.0.1:6379/0?idle=100&active=100&wait=true&timeout=3s
+    cm_yn_loan1:
+      address: redis://@127.0.0.1:6379/1?idle=100&active=100&wait=true&timeout=3s
+    cm_yn_loan2:
+      address: redis://@127.0.0.1:6379/2?idle=100&active=100&wait=true&timeout=3s
+
