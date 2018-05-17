@@ -195,14 +195,21 @@ func create%s() (interface{}, error) {
 		log.Fatalln("create%s | Exist | key=", key)
 	}
 
-	conn, err := etcdv3.NewConn("protoc-gen-cuckoo/%s", config.GetString(key))
+	var srvOpts struct {
+		Address []string
+	}
+	err := config.UnmarshalOption(key, &srvOpts)
+	if err != nil {
+		log.Fatalln("create%s | UnmarshalOption | err=", err)
+	}
+	conn, err := etcdv3.NewConn("protoc-gen-cuckoo/%s", srvOpts.Address...)
 	if err != nil {
 		log.Fatalln("create%s | NewConn | err=", err)
 	}
 
 	client := New%sClient(conn)
 	return interface{}(client), nil
-}`, serviceName, name, serviceName, serviceName, serviceName, serviceName)
+}`, serviceName, name, serviceName, serviceName, serviceName, serviceName, serviceName)
 	g.b.Line()
 	g.b.Format(`
 type %sRPCClient struct {

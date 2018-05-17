@@ -30,7 +30,14 @@ func createKV() (interface{}, error) {
 		log.Fatalln("createKV | Exist | key=", key)
 	}
 
-	conn, err := etcdv3.NewConn("protoc-gen-cuckoo/KV", config.GetString(key))
+	var srvOpts struct {
+		Address []string
+	}
+	err := config.UnmarshalOption(key, &srvOpts)
+	if err != nil {
+		log.Fatalln("createKV | UnmarshalOption | err=", err)
+	}
+	conn, err := etcdv3.NewConn("protoc-gen-cuckoo/KV", srvOpts.Address...)
 	if err != nil {
 		log.Fatalln("createKV | NewConn | err=", err)
 	}
