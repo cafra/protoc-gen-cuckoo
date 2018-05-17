@@ -155,8 +155,7 @@ func (g *Generator) generateHeader(file *descriptor.FileDescriptorProto) {
 func (g *Generator) generateImports(file *descriptor.FileDescriptorProto) {
 	g.b.Line(`
 import (
-	"fmt"
-	"os"
+	"log"
 
 	etcdv3 "github.com/carolove/cuckoo/net/grpc/lb/local"
 	"github.com/cuigh/auxo/util/lazy"
@@ -175,37 +174,40 @@ func (g *Generator) generateService(file *descriptor.FileDescriptorProto, servic
 	g.b.Format(`
 var (
 	%s = &%sRPCClient{lazyValue: lazy.Value{New: create%s}}
-)
+)`, name, name, serviceName)
 
+	g.b.Line()
+	g.b.Format(`
 func Get%s() %sClient {
 	v, err := %s.lazyValue.Get()
 	if err != nil {
-		fmt.Println("%s service Get failed!")
-		return nil
+		log.Fatalln("%sClient | %s service Get failed! | err=", err)
 	}
 
 	return v.(%sClient)
-}
+}`, serviceName, serviceName, name, serviceName, serviceName, serviceName)
 
+	g.b.Line()
+	g.b.Format(`
 func create%s() (interface{}, error) {
 	key := "rpc.client.%s"
 	if !config.Exist(key) {
-		os.Exit(-1)
+		log.Fatalln("create%s | Exist | key=", key)
 	}
 
 	conn, err := etcdv3.NewConn("protoc-gen-cuckoo/%s", config.GetString(key))
 	if err != nil {
-		panic(err)
+		log.Fatalln("create%s | NewConn | err=", err)
 	}
 
 	client := New%sClient(conn)
 	return interface{}(client), nil
-}
-
+}`, serviceName, name, serviceName, serviceName, serviceName, serviceName)
+	g.b.Line()
+	g.b.Format(`
 type %sRPCClient struct {
 	lazyValue lazy.Value
-}`, name, name, serviceName, serviceName, serviceName, name, serviceName,
-		serviceName, serviceName, name, name, serviceName, name)
+}`, name)
 	g.b.Line()
 
 }

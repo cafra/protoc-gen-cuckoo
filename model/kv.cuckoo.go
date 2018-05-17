@@ -5,7 +5,7 @@ package model
 
 import (
 	"fmt"
-	"os"
+	"log"
 
 	etcdv3 "github.com/carolove/cuckoo/net/grpc/lb/local"
 	"github.com/cuigh/auxo/config"
@@ -20,7 +20,7 @@ func GetKV() KVClient {
 	v, err := kv.lazyValue.Get()
 	if err != nil {
 		fmt.Println("KV service Get failed!")
-		return nil
+		log.Fatalln("KVClient | Get | err=", err)
 	}
 
 	return v.(KVClient)
@@ -29,16 +29,15 @@ func GetKV() KVClient {
 func createKV() (interface{}, error) {
 	key := "rpc.client.kv"
 	if !config.Exist(key) {
-		os.Exit(-1)
+		log.Fatalln("createKV | Exist | key=", key)
 	}
 
 	conn, err := etcdv3.NewConn("protoc-gen-cuckoo/kv", config.GetString(key))
 	if err != nil {
-		panic(err)
+		log.Fatalln("createKV | NewConn | err=", err)
 	}
 
 	client := NewKVClient(conn)
-
 	return interface{}(client), nil
 }
 
