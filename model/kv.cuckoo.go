@@ -4,7 +4,6 @@
 package model
 
 import (
-	"fmt"
 	"log"
 
 	etcdv3 "github.com/carolove/cuckoo/net/grpc/lb/local"
@@ -19,8 +18,7 @@ var (
 func GetKV() KVClient {
 	v, err := kv.lazyValue.Get()
 	if err != nil {
-		fmt.Println("KV service Get failed!")
-		log.Fatalln("KVClient | Get | err=", err)
+		log.Fatalln("KVClient | KV service Get failed! | err=", err)
 	}
 
 	return v.(KVClient)
@@ -32,7 +30,7 @@ func createKV() (interface{}, error) {
 		log.Fatalln("createKV | Exist | key=", key)
 	}
 
-	conn, err := etcdv3.NewConn("protoc-gen-cuckoo/kv", config.GetString(key))
+	conn, err := etcdv3.NewConn("protoc-gen-cuckoo/KV", config.GetString(key))
 	if err != nil {
 		log.Fatalln("createKV | NewConn | err=", err)
 	}
